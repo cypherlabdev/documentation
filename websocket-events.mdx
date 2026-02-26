@@ -54,6 +54,19 @@ On category topics, every event includes `match_id` so you know which match it r
 
 Triggered when the match status or game stage changes.
 
+**On `match:{id}`:**
+
+```json
+{
+  "type": "status_update",
+  "status": "live",
+  "game_stage": "2H",
+  "timestamp": "2026-02-25T15:15:00Z"
+}
+```
+
+**On `matches:*`:**
+
 ```json
 {
   "type": "status_update",
@@ -97,8 +110,10 @@ Major on-field events. Only sent on `match:{id}` topics.
 | `var_decision` | VAR review decision |
 | `penalty` | Penalty awarded or taken |
 
-### Goal
+### Payload Examples
 
+<Tabs>
+  <Tab title="Goal">
 ```json
 {
   "type": "incident",
@@ -113,9 +128,8 @@ Major on-field events. Only sent on `match:{id}` topics.
   "timestamp": "2026-02-25T15:37:00Z"
 }
 ```
-
-### Card
-
+  </Tab>
+  <Tab title="Card">
 ```json
 {
   "type": "incident",
@@ -129,9 +143,8 @@ Major on-field events. Only sent on `match:{id}` topics.
   "timestamp": "2026-02-25T15:25:30Z"
 }
 ```
-
-### Substitution
-
+  </Tab>
+  <Tab title="Substitution">
 ```json
 {
   "type": "incident",
@@ -146,9 +159,8 @@ Major on-field events. Only sent on `match:{id}` topics.
   "timestamp": "2026-02-25T15:40:15Z"
 }
 ```
-
-### VAR Decision
-
+  </Tab>
+  <Tab title="VAR Decision">
 ```json
 {
   "type": "incident",
@@ -163,6 +175,8 @@ Major on-field events. Only sent on `match:{id}` topics.
   "timestamp": "2026-02-25T15:48:00Z"
 }
 ```
+  </Tab>
+</Tabs>
 
 ## statistics_update
 
@@ -271,7 +285,18 @@ A match left the subscribed group (e.g., completed). Only sent on `matches:*` to
 | `match_added` / `match_removed` | On change | < 5 seconds |
 
 <Info>
-Event latency values are typical — actual latency depends on the upstream provider. `score_update` and `incident` events prioritize speed; `time_update` and `statistics_update` are best-effort periodic updates.
+Event latency values are typical — actual latency depends on the upstream provider. `score_update` and `incident` events prioritize speed; `time_update` and `statistics_update` are best-effort periodic updates whose cadence varies by provider.
+</Info>
+
+## Event Ordering
+
+Events are delivered in the order they are received from the upstream provider. In most cases this is chronological, but be aware of two edge cases:
+
+- A `score_update` may arrive **before** the corresponding `incident` (goal) event, since score changes are prioritized for speed.
+- After a reconnection, you may receive a burst of events that were queued during the disconnect. These are sent in order but may arrive rapidly.
+
+<Info>
+If you are building a match timeline UI, sort events by `minute` + `second` rather than relying on arrival order.
 </Info>
 
 ## Deduplication
@@ -281,18 +306,25 @@ After reconnections, you may receive duplicate events. Deduplicate using `match_
 </Warning>
 
 ```javascript
-const seen = new Set();
+const seen = new Map(); // key → timestamp (ms) when added
+const TTL = 5 * 60 * 1000; // 5 minutes
 
 function handleEvent(msg) {
   const matchId = msg.match_id || 'self';
   const key = `${matchId}:${msg.type}:${msg.timestamp}`;
-  if (seen.has(key)) return;
-  seen.add(key);
+
+  if (seen.has(key)) return; // Duplicate — skip
+  seen.set(key, Date.now());
 
   // Process event...
 
-  // Cleanup old keys periodically
-  if (seen.size > 10000) seen.clear();
+  // Evict stale keys older than TTL
+  if (seen.size > 1000) {
+    const now = Date.now();
+    for (const [k, addedAt] of seen) {
+      if (now - addedAt > TTL) seen.delete(k);
+    }
+  }
 }
 ```
 
