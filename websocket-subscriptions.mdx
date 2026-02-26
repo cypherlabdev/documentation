@@ -8,7 +8,7 @@ After authenticating your WebSocket connection, subscribe to topics to receive r
 
 | Topic Pattern | Granularity | Data | Use Case |
 |--------------|-------------|------|----------|
-| `match:{id}` | Single match | Full detail — scores, incidents, stats, stream status | Match detail page |
+| `match:{id}` | Single match | Full detail — scores, incidents, stats, weather, stream status | Match detail page |
 | `matches:live` | All live matches | Lightweight — score changes, status changes, match added/removed | Live dashboard |
 | `matches:league:{id}` | League matches | Lightweight — same as above, scoped to one league | League view |
 | `matches:sport:{id}` | Sport matches | Lightweight — same as above, scoped to one sport | Sport overview |
@@ -19,7 +19,7 @@ After authenticating your WebSocket connection, subscribe to topics to receive r
 
 ## Instance Topics: `match:{id}`
 
-Subscribe to a specific match to receive **all event types** — scores, incidents (goals, cards, substitutions), statistics updates, and stream status changes.
+Subscribe to a specific match to receive **all event types** — scores, incidents (goals, cards, substitutions), statistics updates, weather changes, and stream status changes.
 
 ### Subscribe
 
@@ -32,18 +32,75 @@ Subscribe to a specific match to receive **all event types** — scores, inciden
 
 ### Events You Receive
 
+<Tabs>
+  <Tab title="score_update">
 ```json
-{"type": "score_update", "home_score": 2, "away_score": 1, "timestamp": "2026-02-25T15:45:10Z"}
+{
+  "type": "score_update",
+  "home_score": 2,
+  "away_score": 1,
+  "last_scorer": "home",
+  "timestamp": "2026-02-25T15:45:10Z"
+}
 ```
+  </Tab>
+  <Tab title="incident">
 ```json
-{"type": "incident", "data": {"type": "goal", "minute": 67, "player_name": "M. Salah", "team": "home"}, "timestamp": "2026-02-25T15:45:10Z"}
+{
+  "type": "incident",
+  "data": {
+    "incident_type": "goal",
+    "minute": 67,
+    "player_name": "M. Salah",
+    "team": "home",
+    "score_snapshot": { "home": 2, "away": 1 }
+  },
+  "timestamp": "2026-02-25T15:45:10Z"
+}
 ```
+  </Tab>
+  <Tab title="statistics_update">
 ```json
-{"type": "statistics_update", "data": {"possession": {"home": 58, "away": 42}, "shots_on_target": {"home": 7, "away": 3}}, "timestamp": "2026-02-25T15:45:00Z"}
+{
+  "type": "statistics_update",
+  "data": {
+    "possession": { "home": 58, "away": 42 },
+    "shots_on_target": { "home": 7, "away": 3 }
+  },
+  "timestamp": "2026-02-25T15:45:00Z"
+}
 ```
+  </Tab>
+  <Tab title="weather_update">
 ```json
-{"type": "stream_update", "data": {"stream_id": "s1", "is_live": true, "signal_on": true}, "timestamp": "2026-02-25T15:45:00Z"}
+{
+  "type": "weather_update",
+  "data": {
+    "condition": "Rainy",
+    "temperature": 12,
+    "humidity": 85,
+    "wind_speed": 18,
+    "wind_direction": "SW",
+    "pressure": 1008
+  },
+  "timestamp": "2026-02-25T15:50:00Z"
+}
 ```
+  </Tab>
+  <Tab title="stream_update">
+```json
+{
+  "type": "stream_update",
+  "data": {
+    "stream_id": "s1",
+    "is_live": true,
+    "signal_on": true
+  },
+  "timestamp": "2026-02-25T15:45:00Z"
+}
+```
+  </Tab>
+</Tabs>
 
 ## Category Topics: `matches:*`
 
@@ -51,47 +108,90 @@ Subscribe to a group of matches to receive **lightweight list updates** — scor
 
 ### Subscribe
 
+<Tabs>
+  <Tab title="All Live Matches">
 ```json
 {
   "type": "subscribe",
   "topic": "matches:live"
 }
 ```
-
+  </Tab>
+  <Tab title="By League">
 ```json
 {
   "type": "subscribe",
   "topic": "matches:league:39"
 }
 ```
-
+  </Tab>
+  <Tab title="By Sport">
 ```json
 {
   "type": "subscribe",
   "topic": "matches:sport:1"
 }
 ```
+  </Tab>
+</Tabs>
 
 ### Events You Receive
 
+<Tabs>
+  <Tab title="score_update">
 ```json
-{"type": "score_update", "match_id": "prov-60154495", "home_score": 2, "away_score": 1, "timestamp": "2026-02-25T15:45:10Z"}
+{
+  "type": "score_update",
+  "match_id": "prov-60154495",
+  "home_score": 2,
+  "away_score": 1,
+  "timestamp": "2026-02-25T15:45:10Z"
+}
 ```
+  </Tab>
+  <Tab title="status_update">
 ```json
-{"type": "status_update", "match_id": "prov-60154495", "status": "live", "game_stage": "2H", "timestamp": "2026-02-25T15:15:00Z"}
+{
+  "type": "status_update",
+  "match_id": "prov-60154495",
+  "status": "live",
+  "game_stage": "2H",
+  "timestamp": "2026-02-25T15:15:00Z"
+}
 ```
+  </Tab>
+  <Tab title="match_added">
 ```json
-{"type": "match_added", "match_id": "prov-60154800", "data": {"home_team": "Arsenal", "away_team": "Chelsea", "league_name": "Premier League", "status": "live"}, "timestamp": "2026-02-25T16:00:00Z"}
+{
+  "type": "match_added",
+  "match_id": "prov-60154800",
+  "data": {
+    "home_team": "Arsenal",
+    "away_team": "Chelsea",
+    "league_name": "Premier League",
+    "status": "live"
+  },
+  "timestamp": "2026-02-25T16:00:00Z"
+}
 ```
+  </Tab>
+  <Tab title="match_removed">
 ```json
-{"type": "match_removed", "match_id": "prov-60154495", "reason": "completed", "timestamp": "2026-02-25T16:45:00Z"}
+{
+  "type": "match_removed",
+  "match_id": "prov-60154495",
+  "reason": "completed",
+  "timestamp": "2026-02-25T16:45:00Z"
+}
 ```
+  </Tab>
+</Tabs>
 
 <Warning>
-Category topics send lightweight payloads only — no incidents, statistics, or stream details. Subscribe to `match:{id}` when you need full event data for a specific match.
+Category topics send lightweight payloads only — no incidents, statistics, weather, or stream details. Subscribe to `match:{id}` when you need full event data for a specific match.
 </Warning>
 
-## Response Messages
+## Subscribe / Unsubscribe Messages
 
 ### Subscribe Success
 
@@ -114,7 +214,7 @@ Category topics send lightweight payloads only — no incidents, statistics, or 
 }
 ```
 
-### Unsubscribe
+### Unsubscribe Request
 
 ```json
 {
@@ -145,15 +245,23 @@ Exceeding subscription limits will not disconnect you, but new subscriptions wil
 
 ## Recommended Client Flow
 
-```
-1. REST  GET /matches?status=live               → render match list
-2. WS    subscribe "matches:live"               → keep list updated
-3. User clicks match prov-60154495
-4. REST  GET /matches/prov-60154495              → render match detail
-5. WS    subscribe "match:prov-60154495"        → get incidents, stats, stream changes
-6. User leaves match detail
-7. WS    unsubscribe "match:prov-60154495"      → clean up
-```
+<Steps>
+  <Step title="Load match list">
+    `GET /matches?status=live` — render match cards
+  </Step>
+  <Step title="Subscribe to live updates">
+    `subscribe "matches:live"` — keep the list updated in real-time
+  </Step>
+  <Step title="User clicks a match">
+    `GET /matches/prov-60154495` — render match detail page
+  </Step>
+  <Step title="Subscribe to match detail">
+    `subscribe "match:prov-60154495"` — receive incidents, stats, stream changes
+  </Step>
+  <Step title="User leaves match detail">
+    `unsubscribe "match:prov-60154495"` — clean up to stay within limits
+  </Step>
+</Steps>
 
 ## Cleanup Patterns
 
@@ -164,16 +272,23 @@ Keep subscriptions tidy to stay within limits:
 - **On disconnect:** All subscriptions are automatically cleared — re-subscribe after reconnecting
 
 ```javascript
-// Example: cleanup on match finish
+// Track which match the user is viewing
+let activeMatchId = null;
+
+// Cleanup on match finish
 function handleEvent(msg) {
-  if (msg.type === 'status_update' && msg.status === 'completed') {
-    ws.send(JSON.stringify({ type: 'unsubscribe', topic: `match:${msg.match_id}` }));
+  if (msg.type === 'status_update' && msg.status === 'completed' && activeMatchId) {
+    ws.send(JSON.stringify({ type: 'unsubscribe', topic: `match:${activeMatchId}` }));
+    activeMatchId = null;
   }
 }
 
-// Example: cleanup on navigation
-function onLeaveMatchPage(matchId) {
-  ws.send(JSON.stringify({ type: 'unsubscribe', topic: `match:${matchId}` }));
+// Cleanup on navigation
+function onLeaveMatchPage() {
+  if (activeMatchId) {
+    ws.send(JSON.stringify({ type: 'unsubscribe', topic: `match:${activeMatchId}` }));
+    activeMatchId = null;
+  }
 }
 ```
 

@@ -13,6 +13,7 @@ Events received on WebSocket topics. The events you receive depend on whether yo
 | `time_update` | Yes | No | Match clock tick |
 | `incident` | Yes | No | Goal, card, substitution, VAR |
 | `statistics_update` | Yes | No | Possession, shots, corners, etc. |
+| `weather_update` | Yes | No | Weather conditions changed |
 | `stream_update` | Yes | No | Stream availability changed |
 | `match_added` | No | Yes | New match entered the group |
 | `match_removed` | No | Yes | Match left the group |
@@ -180,6 +181,25 @@ Match statistics update. Only sent on `match:{id}` topics.
 }
 ```
 
+## weather_update
+
+Weather conditions update at the match venue. Only sent on `match:{id}` topics.
+
+```json
+{
+  "type": "weather_update",
+  "data": {
+    "condition": "Rainy",
+    "temperature": 12,
+    "humidity": 85,
+    "wind_speed": 18,
+    "wind_direction": "SW",
+    "pressure": 1008
+  },
+  "timestamp": "2026-02-25T15:50:00Z"
+}
+```
+
 ## stream_update
 
 Stream availability change. Only sent on `match:{id}` topics.
@@ -246,6 +266,7 @@ A match left the subscribed group (e.g., completed). Only sent on `matches:*` to
 | `time_update` | Every 10-30 seconds | Best effort |
 | `incident` | Per on-field event | < 5 seconds |
 | `statistics_update` | Every 30-60 seconds | Best effort |
+| `weather_update` | Every 15-30 minutes | Best effort |
 | `stream_update` | On change | < 5 seconds |
 | `match_added` / `match_removed` | On change | < 5 seconds |
 

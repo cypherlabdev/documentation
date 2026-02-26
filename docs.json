@@ -44,6 +44,7 @@
           "endpoints/get-match-lineups",
           "endpoints/get-match-statistics",
           "endpoints/get-match-insights",
+          "endpoints/get-match-weather",
           "endpoints/get-match-streams"
         ]
       },
@@ -59,6 +60,7 @@
           "playground/get-match-lineups",
           "playground/get-match-statistics",
           "playground/get-match-insights",
+          "playground/get-match-weather",
           "playground/get-match-streams"
         ]
       },

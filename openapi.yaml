@@ -1324,8 +1324,7 @@ paths:
         - Matches
       summary: Get Match Statistics
       description: >-
-        Retrieve possession, shots, corners, fouls, and weather data for a
-        match.
+        Retrieve possession, shots, corners, fouls, and other match statistics.
       parameters:
         - in: path
           name: id
@@ -1376,6 +1375,35 @@ paths:
         metadata:
           title: Get Match Insights
         href: /playground/get-match-insights
+  /matches/{id}/weather:
+    get:
+      tags:
+        - Matches
+      summary: Get Match Weather
+      description: >-
+        Retrieve weather conditions at the venue for a match, including
+        temperature, humidity, wind, and atmospheric pressure.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Unique match ID.
+      responses:
+        '200':
+          description: Weather data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Weather'
+      x-mint:
+        metadata:
+          title: Get Match Weather
+        href: /playground/get-match-weather
   /matches/{id}/streams:
     get:
       tags:

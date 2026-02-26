@@ -11,6 +11,7 @@ While the REST API is suitable for initial data loads and polling, the **WebSock
 - **Time Updates:** Regular ticks for the current match clock
 - **Incidents:** Goals, red/yellow cards, substitutions, VAR decisions
 - **Statistics Updates:** Possession, shots, corners, fouls
+- **Weather Updates:** Condition, temperature, humidity, wind changes at the venue
 - **Stream Status:** Stream availability and signal changes
 
 ## Topic Model
@@ -19,7 +20,7 @@ AGG uses colon-separated topics with two granularity levels:
 
 | Topic | Data Level | Use Case |
 |-------|-----------|----------|
-| `match:{id}` | Full detail | Match detail page — incidents, stats, stream changes |
+| `match:{id}` | Full detail | Match detail page — incidents, stats, weather, stream changes |
 | `matches:live` | Lightweight | Dashboard — score/status changes across all live matches |
 | `matches:league:{id}` | Lightweight | League view — score/status changes for one league |
 | `matches:sport:{id}` | Lightweight | Sport view — score/status changes for one sport |
