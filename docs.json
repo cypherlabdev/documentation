@@ -1,0 +1,120 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Aggregator Platform",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#10B981",
+    "dark": "#047857"
+  },
+  "favicon": "/favicon.png",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Overview",
+        "pages": [
+          "introduction",
+          "getting-started"
+        ]
+      },
+      {
+        "group": "Authentication",
+        "pages": [
+          "authentication"
+        ]
+      },
+      {
+        "group": "Guides",
+        "pages": [
+          "guides/quickstart",
+          "integration-architecture",
+          "guides/common-use-cases",
+          "guides/troubleshooting"
+        ]
+      },
+      {
+        "group": "REST API",
+        "pages": [
+          "rest-api",
+          "endpoints/auth-token",
+          "endpoints/list-sports",
+          "endpoints/list-leagues",
+          "endpoints/list-matches",
+          "endpoints/get-match",
+          "endpoints/get-match-lineups",
+          "endpoints/get-match-statistics",
+          "endpoints/get-match-insights",
+          "endpoints/get-match-streams"
+        ]
+      },
+      {
+        "group": "API Playground",
+        "pages": [
+          "api-playground",
+          "openapi.yaml post /auth/token",
+          "openapi.yaml get /sports",
+          "openapi.yaml get /leagues",
+          "openapi.yaml get /matches",
+          "openapi.yaml get /matches/{id}",
+          "openapi.yaml get /matches/{id}/lineups",
+          "openapi.yaml get /matches/{id}/statistics",
+          "openapi.yaml get /matches/{id}/insights",
+          "openapi.yaml get /matches/{id}/streams"
+        ]
+      },
+      {
+        "group": "WebSocket API",
+        "pages": [
+          "websocket",
+          "websocket-connection",
+          "websocket-subscriptions",
+          "websocket-events",
+          "websocket-playground"
+        ]
+      },
+      {
+        "group": "Streaming",
+        "pages": [
+          "streams",
+          "stream-playback"
+        ]
+      },
+      {
+        "group": "Policies",
+        "pages": [
+          "policies/versioning"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "rate-limits",
+          "errors",
+          "release-notes",
+          "changelog"
+        ]
+      }
+    ]
+  },
+  "api": {
+    "openapi": "openapi.yaml"
+  },
+  "background": {
+    "color": {
+      "dark": "#0B1120"
+    }
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://dashboard.agg.example.com"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/agg-platform",
+      "twitter": "https://twitter.com/agg-platform"
+    }
+  }
+}
