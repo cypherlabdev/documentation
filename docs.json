@@ -51,15 +51,15 @@
         "group": "API Playground",
         "pages": [
           "api-playground",
-          "openapi.yaml post /auth/token",
-          "openapi.yaml get /sports",
-          "openapi.yaml get /leagues",
-          "openapi.yaml get /matches",
-          "openapi.yaml get /matches/{id}",
-          "openapi.yaml get /matches/{id}/lineups",
-          "openapi.yaml get /matches/{id}/statistics",
-          "openapi.yaml get /matches/{id}/insights",
-          "openapi.yaml get /matches/{id}/streams"
+          "playground/auth-token",
+          "playground/list-sports",
+          "playground/list-leagues",
+          "playground/list-matches",
+          "playground/get-match",
+          "playground/get-match-lineups",
+          "playground/get-match-statistics",
+          "playground/get-match-insights",
+          "playground/get-match-streams"
         ]
       },
       {
