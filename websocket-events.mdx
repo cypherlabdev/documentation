@@ -1,9 +1,6 @@
 ---
 title: "WebSocket Events"
-description: "Detailed payloads for WebSocket real-time events"
 ---
-
-# WebSocket Events
 
 Events received on WebSocket topics. The events you receive depend on whether you subscribed to an instance topic (`match:{id}`) or a category topic (`matches:*`).
 
@@ -277,3 +274,20 @@ function handleEvent(msg) {
   if (seen.size > 10000) seen.clear();
 }
 ```
+
+## Related Pages
+
+<CardGroup cols={2}>
+  <Card title="WebSocket Overview" icon="wifi" href="/websocket">
+    Topic model, lifecycle, and complete working example
+  </Card>
+  <Card title="Subscriptions" icon="bell" href="/websocket-subscriptions">
+    Topics, subscribe/unsubscribe, and limits
+  </Card>
+  <Card title="Connection Guide" icon="plug" href="/websocket-connection">
+    Auth, heartbeat, and reconnect patterns
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/guides/troubleshooting#websocket-issues">
+    Common WebSocket issues and fixes
+  </Card>
+</CardGroup>

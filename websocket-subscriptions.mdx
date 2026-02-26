@@ -1,9 +1,6 @@
 ---
 title: "WebSocket Subscriptions"
-description: "How to subscribe to topics for real-time updates"
 ---
-
-# WebSocket Subscriptions
 
 After authenticating your WebSocket connection, subscribe to topics to receive real-time data. AGG uses a colon-separated topic model with two granularity levels.
 
@@ -94,16 +91,7 @@ Subscribe to a group of matches to receive **lightweight list updates** — scor
 Category topics send lightweight payloads only — no incidents, statistics, or stream details. Subscribe to `match:{id}` when you need full event data for a specific match.
 </Warning>
 
-## Subscribe / Unsubscribe Messages
-
-### Subscribe
-
-```json
-{
-  "type": "subscribe",
-  "topic": "match:prov-60154495"
-}
-```
+## Response Messages
 
 ### Subscribe Success
 
@@ -191,4 +179,17 @@ function onLeaveMatchPage(matchId) {
 
 ## Related Pages
 
-See [WebSocket Events](/websocket-events) for detailed event payloads per topic type.
+<CardGroup cols={2}>
+  <Card title="WebSocket Overview" icon="wifi" href="/websocket">
+    Topic model, lifecycle, and complete working example
+  </Card>
+  <Card title="Connection Guide" icon="plug" href="/websocket-connection">
+    Auth, heartbeat, and reconnect patterns
+  </Card>
+  <Card title="Event Payloads" icon="message" href="/websocket-events">
+    Detailed payloads for each event type
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/guides/troubleshooting#websocket-issues">
+    Common WebSocket issues and fixes
+  </Card>
+</CardGroup>
