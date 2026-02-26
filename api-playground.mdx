@@ -1,0 +1,48 @@
+---
+title: "API Playground Overview"
+---
+
+Send real requests to the AGG API directly from the docs. Select an endpoint below, enter your Bearer token, fill in parameters, and hit **Send**.
+
+<Warning>
+Use **staging** credentials when testing. The playground sends real requests to the server defined in the OpenAPI spec.
+</Warning>
+
+## How to Use
+
+1. Get an access token by calling `POST /v1/auth/token` with your HMAC-signed credentials — see [Authentication](/authentication#obtaining-a-token)
+2. Copy the `access_token` from the response
+3. Select an endpoint below and paste the token into the **Authorization** field
+4. Fill in any required parameters and hit **Send**
+
+## Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Auth Token" icon="key" href="/playground/auth-token">
+    Get an access token
+  </Card>
+  <Card title="List Sports" icon="football" href="/playground/list-sports">
+    Fetch available sports
+  </Card>
+  <Card title="List Leagues" icon="trophy" href="/playground/list-leagues">
+    Fetch leagues by sport
+  </Card>
+  <Card title="List Matches" icon="list" href="/playground/list-matches">
+    Fetch matches with filters
+  </Card>
+  <Card title="Get Match" icon="magnifying-glass" href="/playground/get-match">
+    Fetch full match details
+  </Card>
+  <Card title="Get Match Lineups" icon="users" href="/playground/get-match-lineups">
+    Fetch match lineups
+  </Card>
+  <Card title="Get Match Statistics" icon="chart-bar" href="/playground/get-match-statistics">
+    Fetch match statistics
+  </Card>
+  <Card title="Get Match Insights" icon="lightbulb" href="/playground/get-match-insights">
+    Fetch match insights
+  </Card>
+  <Card title="Get Match Streams" icon="play" href="/playground/get-match-streams">
+    Fetch stream URLs for a match
+  </Card>
+</CardGroup>

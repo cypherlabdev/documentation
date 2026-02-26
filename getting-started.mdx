@@ -1,0 +1,122 @@
+---
+title: "Getting Started"
+---
+
+This page covers the essentials you need before making your first API call: environments, base URLs, request conventions, and response format.
+
+<Tip>
+Ready to jump straight into code? Head to the [Quickstart](/guides/quickstart) to make your first API call in 5 minutes.
+</Tip>
+
+## Environment Setup Checklist
+
+1. Obtain your `merchant_code` and `merchant_secret` from the [Dashboard](https://dashboard.agg.example.com)
+2. Set environment variables:
+   ```bash
+   export AGG_MERCHANT_CODE="your-merchant-code"
+   export AGG_MERCHANT_SECRET="your-merchant-secret"
+   export AGG_BASE_URL="https://staging-api.agg.example.com/v1"
+   ```
+3. Test the connection by calling `POST /v1/auth/token` with an HMAC-signed request
+4. Verify you receive a valid `access_token` in the response
+
+## Base URLs
+
+<Tabs>
+<Tab title="Staging">
+- **REST API:** `https://staging-api.agg.example.com/v1`
+- **WebSocket:** `wss://staging-ws.agg.example.com/ws`
+</Tab>
+<Tab title="Production">
+- **REST API:** `https://api.agg.example.com/v1`
+- **WebSocket:** `wss://ws.agg.example.com/ws`
+</Tab>
+</Tabs>
+
+<Warning>
+Always develop and test against the **Staging** environment first. Production has stricter rate limits and uses live data.
+</Warning>
+
+### Staging vs Production
+
+| | Staging | Production |
+|---|---|---|
+| **Data** | Sample/delayed data | Live real-time data |
+| **Rate limits** | Relaxed | Strict (10 RPS) |
+| **Streams** | Test URLs (may not play) | Live stream URLs |
+| **Uptime SLA** | Best effort | 99.9% |
+
+## Content-Type
+
+All REST API requests and responses are encoded in JSON:
+
+```http
+Content-Type: application/json
+Accept: application/json
+```
+
+## Timezone
+
+All timestamps in API responses and WebSocket messages are in **UTC (ISO 8601)** format:
+
+- `2024-03-15T14:30:00Z`
+- `2024-03-15T14:30:00+00:00`
+
+Your application is responsible for localizing timestamps for display.
+
+## Response Format
+
+All REST API endpoints return a standard response wrapper.
+
+### Success
+
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": { ... }
+}
+```
+
+### Paginated
+
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": [ ... ],
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 150
+  }
+}
+```
+
+### Error
+
+Errors return non-200 HTTP status codes with a JSON body:
+
+```json
+{
+  "code": 400,
+  "message": "Invalid sport_id provided."
+}
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/authentication">
+    HMAC authentication, scopes, and token management
+  </Card>
+  <Card title="Quickstart Tutorial" icon="bolt" href="/guides/quickstart">
+    Step-by-step guide to your first API call
+  </Card>
+  <Card title="REST API" icon="code" href="/rest-api">
+    Filtering, pagination, and endpoint overview
+  </Card>
+  <Card title="WebSocket API" icon="wifi" href="/websocket">
+    Real-time updates for live matches
+  </Card>
+</CardGroup>
