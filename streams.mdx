@@ -101,6 +101,10 @@ Streams are also included by default when calling `GET /v1/matches/{id}` without
 ```
 </RequestExample>
 
+<Note>
+The `language` field on stream objects refers to the **commentary or audio language** of the stream, not the language of data identifiers. All data-level identifiers (team names, league names, player names) are always returned in English regardless of the stream language. See [Data Language](/getting-started#data-language) for details.
+</Note>
+
 ## Failure Handling
 
 | HTTP Status | Meaning | Action |
