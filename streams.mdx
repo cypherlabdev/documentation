@@ -76,25 +76,36 @@ Streams are also included by default when calling `GET /v1/matches/{id}` without
   "message": "success",
   "data": [
     {
-      "stream_id": "st_789",
-      "url": "https://stream.agg.example.com/live/sport/60154495_hd.m3u8",
-      "format": "m3u8",
-      "language": "en",
-      "quality": "1080p"
+      "match_id": "60154495",
+      "tag": "stream-alpha",
+      "vid": "vid-60154495-streamA-hd",
+      "quality_id": 1,
+      "language_id": 1,
+      "resolution": "1920x1080",
+      "preview_url": "https://img.agg.example.com/stream/preview-a.jpg",
+      "m3u8_url": "https://stream.agg.example.com/live/sport/60154495_hd.m3u8",
+      "flv_url": "https://stream.agg.example.com/live/sport/60154495.flv",
+      "rtmp_url": "rtmp://stream.agg.example.com/live/sport/60154495",
+      "has_video": true,
+      "has_audio": true,
+      "is_live": true,
+      "signal_on": true
     },
     {
-      "stream_id": "st_790",
-      "url": "https://stream.agg.example.com/live/sport/60154495.flv",
-      "format": "flv",
-      "language": "zh",
-      "quality": "720p"
-    },
-    {
-      "stream_id": "st_791",
-      "url": "rtmp://stream.agg.example.com/live/sport/60154495",
-      "format": "rtmp",
-      "language": "es",
-      "quality": "SD"
+      "match_id": "60154495",
+      "tag": "stream-beta",
+      "vid": "vid-60154495-streamB-sd",
+      "quality_id": 2,
+      "language_id": 2,
+      "resolution": "1280x720",
+      "preview_url": "https://img.agg.example.com/stream/preview-b.jpg",
+      "m3u8_url": "https://stream.agg.example.com/live/sport/60154495_sd.m3u8",
+      "flv_url": null,
+      "rtmp_url": null,
+      "has_video": true,
+      "has_audio": true,
+      "is_live": true,
+      "signal_on": true
     }
   ]
 }
@@ -102,7 +113,7 @@ Streams are also included by default when calling `GET /v1/matches/{id}` without
 </RequestExample>
 
 <Note>
-The `language` field on stream objects refers to the **commentary or audio language** of the stream, not the language of data identifiers. All data-level identifiers (team names, league names, player names) are always returned in English regardless of the stream language. See [Data Language](/getting-started#data-language) for details.
+The `language_id` field on stream objects refers to the **commentary or audio language** of the stream, not the language of data identifiers. All data-level identifiers (team names, league names, player names) are always returned in English regardless of the stream language. See [Data Language](/getting-started#data-language) for details.
 </Note>
 
 ## Failure Handling
