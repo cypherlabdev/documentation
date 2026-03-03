@@ -11,6 +11,10 @@ Retrieve video stream URLs (HLS/FLV/RTMP) for a specific match.
 This is a dedicated endpoint for streams. It returns exactly the same `streams` array as `GET /matches/{id}?include=streams`, but without the core match fields.
 </Info>
 
+<Info>
+**Rate limit:** 12 requests/min (semi-real-time data). See [Rate Limits](/rate-limits#per-endpoint-rate-limits) for details.
+</Info>
+
 ## Request
 
 ### Path Parameters

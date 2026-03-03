@@ -64,6 +64,16 @@ All timestamps in API responses and WebSocket messages are in **UTC (ISO 8601)**
 
 Your application is responsible for localizing timestamps for display.
 
+## Data Language
+
+All data-level identifiers returned by the API — including league names, team names, player names, and venue names — are in **English only**.
+
+<Info>
+Localized translations (e.g., Chinese, Spanish) are **not** provided inline in API responses. If your platform requires multilingual display, translations should be managed through a separate dictionary or mapping layer on your side.
+</Info>
+
+Do not rely on the API returning non-English identifiers. The `language` or `language_id` fields that appear on certain resources (e.g., streams) refer to the **content language** of that specific resource (such as commentary language), not the language of the data identifiers.
+
 ## Response Format
 
 All REST API endpoints return a standard response wrapper.

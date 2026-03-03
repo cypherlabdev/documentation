@@ -39,7 +39,7 @@ AGG powers a wide range of client applications:
 
 ## Supported Protocols
 
-AGG exposes data through two primary protocols to cater to different integration needs:
+AGG exposes data through two primary protocols. Clients choose which to use based on their needs — or combine both for a complete integration.
 
 <CardGroup cols={2}>
   <Card title="REST API" icon="server" href="/rest-api">
@@ -49,6 +49,21 @@ AGG exposes data through two primary protocols to cater to different integration
     Designed for real-time updates. It delivers low-latency live scores, match status changes, incidents, and live statistics.
   </Card>
 </CardGroup>
+
+### Choosing Between REST and WebSocket
+
+| Scenario | Recommended | Why |
+|----------|-------------|-----|
+| Initial data load (sports, leagues, match list) | REST | One-time fetch of structured data |
+| Static or slow-changing data (lineups, formations) | REST | Data changes infrequently; poll once per day |
+| Live match scores and events | WebSocket | Low-latency push — no polling overhead |
+| Real-time odds or statistics updates | WebSocket | Sub-second delivery of changing data |
+| On-demand match detail lookup | REST | User-triggered, not continuous |
+| Environments without persistent connections | REST | WebSocket may not be available (e.g., serverless functions) |
+
+<Tip>
+Most integrations use **both**: REST for bootstrapping data and on-demand queries, and WebSocket for real-time updates during live matches.
+</Tip>
 
 ## Current Scope
 

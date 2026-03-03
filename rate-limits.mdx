@@ -22,15 +22,37 @@ The standard rate limit for the REST API is:
 
 These limits are designed to comfortably support polling fallbacks and initial data loads for a large number of clients. If your application requires higher throughput, please contact your account manager to request a limit increase.
 
-### Per-Endpoint Recommendations
+### Per-Endpoint Rate Limits
 
-| Endpoint | Suggested Poll Interval | Notes |
-|----------|------------------------|-------|
-| `/sports` | Once per day | Rarely changes |
-| `/leagues` | Once per day | Rarely changes |
-| `/matches?status=live` | 30 seconds | Use WebSocket instead if possible |
-| `/matches/{id}` | 15-30 seconds | Use WebSocket for real-time |
-| `/matches/{id}?include=streams` | 5 minutes | Only re-fetch when user is viewing |
+In addition to the global limits above, each endpoint has a maximum call frequency based on its data type. Exceeding the per-endpoint limit returns a `429` response even if the global budget has capacity.
+
+#### Static / Slow-Changing Data
+
+| Endpoint | Rate Limit | Rationale |
+|----------|-----------|-----------|
+| `GET /sports` | 60 req/hour | Sport list rarely changes |
+| `GET /leagues` | 60 req/hour | League list rarely changes |
+| `GET /matches/{id}/lineups` | 60 req/hour | Set before kickoff, does not change mid-match |
+| `GET /matches/{id}/insights` | 60 req/hour | Pre-match data |
+
+#### Semi-Real-Time Data
+
+| Endpoint | Rate Limit | Rationale |
+|----------|-----------|-----------|
+| `GET /matches` | 60 req/min | Match list and status updates |
+| `GET /matches/{id}` | 60 req/min | Match detail polling |
+| `GET /matches/{id}/statistics` | 60 req/min | Stats update periodically during a match |
+| `GET /matches/{id}/streams` | 12 req/min | Stream URLs; re-fetch only on playback start or failure |
+
+#### Real-Time Data
+
+| Endpoint | Rate Limit | Rationale |
+|----------|-----------|-----------|
+| WebSocket live events | No REST limit — use WebSocket | Pushed in real-time via subscription |
+
+<Tip>
+For real-time data (live scores, incidents, odds), always prefer **WebSocket** over REST polling. WebSocket subscriptions are not subject to REST rate limits and deliver updates with lower latency.
+</Tip>
 
 ### Rate Limit Headers
 
@@ -99,7 +121,17 @@ async function fetchWithBackoff(url, token, maxRetries = 5) {
 
 ### Handling 429 Errors
 
-If you receive a `429 Too Many Requests` response, you must pause sending requests until the time specified in the `X-RateLimit-Reset` header.
+If you receive a `429 Too Many Requests` response, you must pause sending requests until the rate limit window resets.
+
+The response includes a `Retry-After` header indicating how many seconds to wait:
+
+```http
+HTTP/1.1 429 Too Many Requests
+Retry-After: 1
+X-RateLimit-Limit: 10
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1710520200
+```
 
 ```json
 {
@@ -107,6 +139,9 @@ If you receive a `429 Too Many Requests` response, you must pause sending reques
   "message": "Rate limit exceeded. Please wait 1 seconds."
 }
 ```
+
+- **`Retry-After`**: Seconds to wait before retrying (preferred for simple retry logic)
+- **`X-RateLimit-Reset`**: UNIX timestamp when the window resets (preferred for scheduling)
 
 ## WebSocket Limits
 
