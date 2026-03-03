@@ -11,7 +11,12 @@ Initial stable release of the AGG platform, unifying REST APIs and WebSocket rea
   - `GET /v1/sports` — List available sports
   - `GET /v1/leagues` — List available leagues
   - `GET /v1/matches` — Paginated match listing with filtering
-  - `GET /v1/matches/{id}` — Match details with selective `include` parameter (streams, incidents available; statistics, lineups, weather, insights coming soon)
+  - `GET /v1/matches/{id}` — Match details with selective `include` parameter (streams, incidents, statistics, lineups, weather, insights)
+  - `GET /v1/matches/{id}/lineups` — Starting lineups, bench, and formation
+  - `GET /v1/matches/{id}/statistics` — Match statistics
+  - `GET /v1/matches/{id}/insights` — H2H, form guide, rankings, injuries
+  - `GET /v1/matches/{id}/streams` — Stream URLs
+  - `GET /v1/matches/{id}/weather` — Venue weather conditions
 - **WebSocket:**
   - JWT authentication via `auth` message
   - Topic-based subscriptions: `match:{id}`, `matches:live`, `matches:league:{id}`, `matches:sport:{id}`
