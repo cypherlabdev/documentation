@@ -121,7 +121,17 @@ async function fetchWithBackoff(url, token, maxRetries = 5) {
 
 ### Handling 429 Errors
 
-If you receive a `429 Too Many Requests` response, you must pause sending requests until the time specified in the `X-RateLimit-Reset` header.
+If you receive a `429 Too Many Requests` response, you must pause sending requests until the rate limit window resets.
+
+The response includes a `Retry-After` header indicating how many seconds to wait:
+
+```http
+HTTP/1.1 429 Too Many Requests
+Retry-After: 1
+X-RateLimit-Limit: 10
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1710520200
+```
 
 ```json
 {
@@ -129,6 +139,9 @@ If you receive a `429 Too Many Requests` response, you must pause sending reques
   "message": "Rate limit exceeded. Please wait 1 seconds."
 }
 ```
+
+- **`Retry-After`**: Seconds to wait before retrying (preferred for simple retry logic)
+- **`X-RateLimit-Reset`**: UNIX timestamp when the window resets (preferred for scheduling)
 
 ## WebSocket Limits
 
